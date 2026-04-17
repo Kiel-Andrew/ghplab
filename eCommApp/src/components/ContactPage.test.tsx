@@ -21,7 +21,7 @@ describe('ContactPage', () => {
         expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
     });
 
-    it('accepts input and clears on submit without saving', () => {
+    it('accepts input, clears on submit, and shows confirmation', () => {
         render(<ContactPage />);
 
         const nameInput = screen.getByPlaceholderText('Your Name') as HTMLInputElement;
@@ -36,5 +36,9 @@ describe('ContactPage', () => {
         expect(nameInput.value).toBe('');
         expect(emailInput.value).toBe('');
         expect(issueInput.value).toBe('');
+        expect(screen.getByText('Thanks for reaching out. We received your issue.')).toBeInTheDocument();
+
+        fireEvent.change(nameInput, { target: { value: 'J' } });
+        expect(screen.queryByText('Thanks for reaching out. We received your issue.')).not.toBeInTheDocument();
     });
 });
